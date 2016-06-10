@@ -13,11 +13,11 @@
 	</style>
 
 	<head>
-		<title>{{ USERNAME }}'s Slack Report</title>
+		<title>{{ theUser }}'s Slack Report</title>
 	</head>
 
 	<body>
-		<h1 align="center">{{ USERNAME }}</h1>
+		<h1 align="center">{{ theUser }}</h1>
 	</body>
 
 	<center><table border="1" style="width:80%">
@@ -27,16 +27,14 @@
 			<th>Time</th>
 		</tr>
 
-		{% for SOMETHING in SOMETHING() %}
+		{% for message in messageInfor() %}
 		<tr>
-			<td>{{ Message }}</td>
-			<td>{{ Channel }}</td>
-			<td>{{ Time }}</td>
+			<td>{{ message[0] }}</td>
+			<td>{{ message[1] }}</td>
+			<td>{{ message[2] }}</td>
 		</tr>
 		{% endfor %}
 
 	</table></center>
 
-	
-			
 </html>
