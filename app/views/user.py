@@ -1,11 +1,19 @@
 from flask import render_template, flash, redirect, session, url_for, request, g
 from datetime import datetime
 from app import app, db, lm, oid
+from message import Message
 from models import slack_user, message_channel, message
 
 #individual user webpage
-@app.route('/user/<theUserId>')
+@app.route('/user/<theUserId>', methods=['POST'])
 def index(theUserID):
+    #grab messages from slack
+    slackMessages = Message.getMessageInfo("C1EGNU95L")
+    #Insert messages in the the user table
+    sendMessagesToDatabase(slackMessages)
+    #Commit the inserts
+    db.session.commit() 
+
 	#Define how long one day is
     oneDay = currentDate() - datetime.timedelta(days = 1)
     
@@ -32,8 +40,7 @@ def index(theUserID):
             channel = message_channel.query.filter_by(channel_number = channelNum)
             channelName = channel.channel_name
             #append Message
-            messageStack.append(messageText, channelName, messageDate)
+            messageStack.append(messageText, channelName, messageDate, userNum)
 
     return render_template('user.html', title="Today's Messages", theUser = userName, messageInfo = messageStack)
-
 
