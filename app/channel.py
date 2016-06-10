@@ -1,4 +1,4 @@
-from model import message_channel
+from app.model import message_channel
 from datetime import datetime
 from slacker import Slacker
 from app import db, slackconnect

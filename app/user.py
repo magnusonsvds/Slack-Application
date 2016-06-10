@@ -1,6 +1,6 @@
 from slacker import Slacker
 
-from model import slack_user
+from app.model import slack_user
 from app import db, slackconnect
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy

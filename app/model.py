@@ -1,8 +1,8 @@
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from app import app
-from app import db
+
+from app import db, app
 import sys
 
 class slack_user(db.Model):
