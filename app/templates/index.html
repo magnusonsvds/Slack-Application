@@ -1,11 +1,20 @@
-<!-- extend base layout -->
 {% extends "base.html" %}
 
-{% block content %}
-    <h1>Hi, {{ user.nickname }}!</h1>
-    {% for post in posts %}
-    <p>
-      {{ post.author.nickname }} says: <b>{{ post.body }}</b>
-    </p>
-    {% endfor %}
-{% endblock %}
+<!DOCTYPE html>
+<html>
+
+	<style>
+	h1 {color:grey;}
+	</style>
+
+	<body>
+		<h1 align="center">Slack Daily Report</h1>
+		<h2>Users</h2>
+		{% for SOMETHING in SOMETHING %}
+		<a href=user.html>
+			<ul>
+				<li>{{ USERNAME }}</li>
+			</ul>
+		</a>
+		{% endfor %}
+	</body>

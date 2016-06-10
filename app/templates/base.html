@@ -1,29 +1,18 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    {% if title %}
-    <title>{{ title }} - microblog</title>
-    {% else %}
-    <title>microblog</title>
-    {% endif %}
-  </head>
-  <body>
-    <div>Microblog:
-        <a href="{{ url_for('index') }}">Home</a>
-        {% if g.user.is_authenticated %}
-        | <a href="{{ url_for('user', nickname=g.user.nickname) }}">Your Profile</a>
-        | <a href="{{ url_for('logout') }}">Logout</a>
-        {% endif %}
-    </div>
-    <hr>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul>
-    {% for message in messages %}
-        <li>{{ message }} </li>
-    {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
-    {% block content %}{% endblock %}
-  </body>
+
+	<style>
+	body {background-color:lightgrey;}
+	</style>
+
+	<head>
+		<title>Slack Daily Report</title>
+	</head>
+
+	<body>
+		<a 
+		href="http://www.svds.com">
+		<center><img src="http://uploads.webflow.com/54d006aa2cb8e4a17a02e212/5522ca29dcc6adcc03851661_SVDS_logo_color_Aug_16_2013.png"></center>
+		</a>
+	</body>	
 </html>

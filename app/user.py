@@ -1,16 +1,11 @@
 from slacker import Slacker
-from slack_entries_database import db
 
-from slack_entries_database import slack_user, message_channel, message
-
+from model import slack_user
+from app import db, slackconnect
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1Svds@123@localhost/slacktestdb'
-db = SQLAlchemy(app)
 
-slackconnect = Slacker("xoxp-48585661490-48566956614-49307999364-419b3ccfc5")
 class User(object):
     def __init__(self):
         self.userInfo = []

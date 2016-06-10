@@ -3,6 +3,7 @@ import sys
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from app import db
+from app import app
 
 class slack_user(db.Model):
     #include the line: __tablename__ = 'slack_user'  ????
