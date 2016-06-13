@@ -17,10 +17,10 @@ db = SQLAlchemy(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1Svds@123@localhost/slacktestdb'
 
 #slackconnect = Slacker(app.config["slack_api_token"])
-slackconnect = Slacker("xoxp-48585661490-48566956614-49633690839-8a11581e73")
+slackconnect = Slacker("xoxp-48585661490-48566956614-50484385090-627e44a726")
 
-#import app.views.index, app.views.user
+from app import views
 from app.channel import Channel
-#from app.user import User
-from app.message import Message
+from app.user import User
+from app.message_class import Message_Class
 from app.model import slack_user, message_channel, message

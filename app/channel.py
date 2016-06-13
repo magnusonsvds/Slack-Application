@@ -10,7 +10,7 @@ class Channel(object):
 	def __init__(self):
 		self.channelInfo = []
 
-	def getChannelInfo():
+	def getChannelInfo(self):
 	    responseObject = slackconnect.channels.list()
 	    responseChannelList = responseObject.body["channels"]
 	    for channel in responseChannelList:
@@ -20,7 +20,7 @@ class Channel(object):
 	        self.channelInfo.append(chanInfo)
 	    return self.channelInfo
 
-	def sendChannelsToDatabase():
+	def sendChannelsToDatabase(self):
 	    for channel in self.channelInfo:
 	        channelNum = channel[0]
 	        channelName = channel[1]

@@ -7,33 +7,34 @@ from app.model import message
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
-class Message(object):
+class Message_Class(object):
 	def __init__(self):
-		self.messageLogInfo = []
+		messageLogInfo = []
 
-	def getMessageInfo(channel):
+	def getMessageInfo(self,channel):
 	    responseObject = slackconnect.channels.history(channel)
 	    responseDict = responseObject.body["messages"]
 	    #print (responseDict)
 
+	    messageLogInfo = []
 	    for i in responseDict:
 	        message = i
 	        text = message["text"]
 	        user = message["user"]
 	        timestamp = message["ts"]
 	        messageInfo = [user,text,timestamp,channel]
-	        self.messageLogInfo.append(messageInfo)
-	    return self.messageLogInfo
+	        messageLogInfo.append(messageInfo)
+	    return messageLogInfo
 
-	def sendMessagesToDatabase():
-	    for mess in self.messageLogInfo:
+	def sendMessagesToDatabase(self, messageLogInfo):
+	    for mess in messageLogInfo:
 	        userNum = mess[0]
 	        text = mess[1]
-	        date = datetimeChange(mess[2])
+	        date = Message_Class.datetimeChange(self, mess[2])
 	        channelNum = mess[3]
 
 	        new_message = message(date, text, userNum, channelNum)
 	        db.session.add(new_message)
 
-	def datetimeChange(timestamp):
+	def datetimeChange(self, timestamp):
 	    return datetime.fromtimestamp(float(timestamp))

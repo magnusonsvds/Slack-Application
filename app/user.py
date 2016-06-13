@@ -9,7 +9,7 @@ class User(object):
     def __init__(self):
         self.userInfo = []
 
-    def getUserInformation():
+    def getUserInformation(self):
         responseObject = slackconnect.users.list()
         responseMemberList = responseObject.body["members"]
         for member in responseMemberList:
@@ -22,7 +22,7 @@ class User(object):
         return self.userInfo
 
 
-    def sendUsersToDatabase():
+    def sendUsersToDatabase(self):
         for user in self.userInfo:
             userNum = user[0]
             userFirst = user[1]

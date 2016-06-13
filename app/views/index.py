@@ -23,8 +23,8 @@ def before_request():
         sendChannelsToDatabase(channels) 
     db.session.commit()
 
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/index', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
+@app.route('/index', methods=['GET'])
 def home():
     users = slack_user.query.all()
     names = []
