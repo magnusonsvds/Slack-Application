@@ -1,12 +1,9 @@
-from flask import render_template, redirect, session, url_for, request, g
+#from flask import render_template, redirect, session, url_for, request, g
 from datetime import datetime
 from app import app, db
 from app.message import Message
 from app.model import slack_user, message_channel, message
 
-@app.before_request
-def before_request():pass
-#individual user webpage
 @app.route('/user/<theUserId>', methods=['POST'])
 def index(theUserID):
     #grab messages from slack
