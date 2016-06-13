@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 	<style>
 	table{
@@ -13,11 +13,22 @@
 	</style>
 
 	<head>
+		<meta charset="utf-8">
 		<title>{{ theUser }}'s Slack Report</title>
-	</head>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  		<link rel="stylesheet" href="/resources/demos/style.css">
+ 		<script>
+  			$(function() {
+    			$( "#datepicker" ).datepicker({ minDate: (new Date(16,6,13)), maxDate: "+1D" });
+  			});
+  		</script>
+	</head
 
 	<body>
 		<h1 align="center">{{ theUser }}</h1>
+		<p>Date: <input type="text" id="datepicker"></p>
 	</body>
 
 	<center><table border="1" style="width:80%">
