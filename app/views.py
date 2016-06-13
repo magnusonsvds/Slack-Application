@@ -36,7 +36,8 @@ def index():
         userFirst = user.first_name
         userLast = user.last_name
         name = userFirst + " " + userLast
-        individual = [name, userID]
+        # added .title() after name to capitalize the first letter of fn and ln
+        individual = [name.title(), userID]
         names.append(individual)
 
     return render_template('index.html', title="User Directory", USERS = names)
