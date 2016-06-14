@@ -1,11 +1,17 @@
 from flask import render_template, flash, redirect, session, url_for, request, g
-from datetime import datetime
+from datetime import datetime, date
 from app import app, db
 from app.model import slack_user, message_channel, message
 from app.channel import Channel
 from app.user import User
 from app.message_class import Message_Class
 from flask.ext.sqlalchemy import SQLAlchemy
+
+from flask_wtf import Form
+from wtforms import DateField
+
+class DateForm(Form):
+    dt = DateField('Pick a Date', format="%m/%d/%Y")
 
 #updateall of the users and channels into the database when someone vistis /index
 @app.before_request
@@ -45,6 +51,13 @@ def index():
 
 @app.route('/user/<theUserID>:<userName>', methods=['GET','POST'])
 def user(theUserID, userName):
+
+    #Datepicker
+    form = DateForm()
+    if form.validate_on_submit():
+        theDate = form.dt.data.strftime('%x') #is this the right format, need a datetime
+    else:
+        theDate = date.today() - timedelta(hours = 0)
     #grab messages from slack
     msg = Message_Class()
     slackMessages = msg.getMessageInfo("C1EGNU95L")
@@ -80,4 +93,5 @@ def user(theUserID, userName):
         individualMessage = [messageText, channelName, messageDate, userNum]
         messageStack.append(individualMessage)
 
-    return render_template('user.html', title= theUserName + "'s messages", messageInfo = messageStack)
+
+    return render_template('user.html', title= theUserName + "'s messages", messageInfo = messageStack, form = form)

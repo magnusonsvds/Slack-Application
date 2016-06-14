@@ -4,9 +4,11 @@
 
 
 <h1 align="center">{{ title }}</h1>
-<p>Date: <input type="text" id="datepicker"></p>
-
-<center><table border="1" style="width:80%">
+<form method="post" action="">
+    {{ form.hidden_tag() }}
+    {{ form.dt(class="dtpick") }}
+    <button type="submit">Go</button>
+</form>
 	<tr>
 		<th>Message</th>
 		<th>Channel</th>
