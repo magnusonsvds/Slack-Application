@@ -1,15 +1,62 @@
+
 {% extends "base.html" %}
 
 {% block content %}
-	<h1 align="center">Slack Daily Report</h1>
-	<h2>Users</h2>
+			
+			<form action="" method="post" >
+    			{{form.hidden_tag()}}
+   				 <p>
+   				 	{{form.dt(class="dtpick")}}
+        			{{form.userChoice()}}
+    			</p>
+    			<button type="submit">Go</button>
+			</form>
+				
+			
+			<table class="table table-condensed table-hover table-bordered">
+				<thead>
+					<tr>
+						<th>User</th>
+						<th>Message</th>
+						<th>Channel</th>
+						<th>Time</th>
+					</tr>
+				</thead>
+				{% for message in messageInfo %}
+				<tbody>
+					<tr>
+						<td>{{ message[3] }}</td>
+						<td>{{ message[0] }}</td>
+						<td>{{ message[1] }}</td>
+						<td>{{ message[2] }}</td>
+					</tr>
+				</tbody>
+				{% endfor %}
+			</table>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(document).ready(function() {
+		// https://select2.github.io/examples.html
+		$(".tags-select").select2({});
+	});
+	</script>
 
-	{% for user in USERS %}
-	
+
+<h2>Users</h2>
+{{randomInfo}}
+	{% for userKey in USERS %}
+		<p>
+			{{userKey.first_name}}
+		</p>
 		<ul>
-			<li><a href="{{ url_for('user', theUserID=user[1], userName=user[0])}}">{{user[0]}}</a></li>
+			<li><a href="{{ url_for('user', theUserID=userKey[USERS], userName=userKey)}}">{{userKey}}</a></li>
 		</ul>
 	
 	{% endfor %}
 
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/scripts.js"></script>
 {% endblock %}

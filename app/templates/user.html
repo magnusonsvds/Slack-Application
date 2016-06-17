@@ -3,12 +3,16 @@
 {% block content %}
 
 
+
 <h1 align="center">{{ title }}</h1>
+<p>
 <form method="post" action="">
     {{ form.hidden_tag() }}
     {{ form.dt(class="dtpick") }}
     <button type="submit">Go</button>
 </form>
+</p>
+<table>
 	<tr>
 		<th>Message</th>
 		<th>Channel</th>
@@ -16,11 +20,11 @@
 	</tr>
 
 	{% for message in messageInfo %}
-	<tr>
-		<td>{{ message[0] }}</td>
-		<td>{{ message[1] }}</td>
-		<td>{{ message[2] }}</td>
-	</tr>
+		<tr>
+			<td>{{ message[0] }}</td>
+			<td>{{ message[1] }}</td>
+			<td>{{ message[2] }}</td>
+		</tr>
 	{% endfor %}
 
 </table></center>

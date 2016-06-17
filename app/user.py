@@ -8,6 +8,8 @@ from flask_sqlalchemy import SQLAlchemy
 class User(object):
     def __init__(self):
         self.userInfo = []
+        self.table = slack_user
+        self.allUsers = []
 
     def getUserInformation(self):
         responseObject = slackconnect.users.list()
@@ -21,7 +23,6 @@ class User(object):
             self.userInfo.append(memberInfo)
         return self.userInfo
 
-
     def sendUsersToDatabase(self):
         for user in self.userInfo:
             userNum = user[0]
@@ -29,4 +30,18 @@ class User(object):
             userLast = user[2]
 
             new_user = slack_user(userNum, userFirst, userLast)
-            db.session.add(new_user)
+            db.session.merge(new_user)
+
+    #similar ot getUserInformation but returns in a different format
+    def userList(self):
+        query = self.table.query.all()
+        names = {}
+        for user in query:
+            userID = user.slack_number
+            userFirst = user.first_name
+            userLast = user.last_name
+            name = userFirst + " " + userLast
+            
+            # added .title() after name to capitalize the first letter of fn and ln
+            names[name] = userID
+        return names
