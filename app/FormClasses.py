@@ -3,7 +3,7 @@ from flask_wtf import Form
 from wtforms import SelectMultipleField, SubmitField, DateField, SelectField
 
 
-class Select2TagForm(Form):
+class Select2TagForm(Form,UserClass,ChannelClass):
     dataUser = []
     dataChannel = []
     userChoice = SelectField(u'Select User: ', choices = dataUser)

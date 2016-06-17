@@ -63,13 +63,15 @@ def formatDataForDropdown(dataDictionary):
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
+    usr =User()
+    ch = Channel()
     allUserData = User().userList()
     allChannelData = Channel().channelList()
     #selectable data for drop downs
     selectableUserData = formatDataForDropdown(allUserData)
     selectableChannelData = formatDataForDropdown(allChannelData)
     #Create a new form with user and channel form
-    form = Select2TagForm(request.form) 
+    form = Select2TagForm(request.form,usr, ch ) 
     form.dataUser = selectableUserData  
     
     if (form.dt.data != None):
