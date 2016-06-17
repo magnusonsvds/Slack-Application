@@ -70,11 +70,11 @@ def before_request():
 #By default channelID should be passed the general channel. Cant search just by date
 def queryMessages(startDate, channelID, slackID):
     eod = startDate + ' 23:59:59'
-    if ((channelID and slackID) == None):
+    if ((channelID and slackID) == "None"):
         userObjects = message.query.filter(startDate < message.date_time, message.date_time <eod).all()
-    elif ((channelID) == None):
+    elif ((channelID) == "None"):
         userObjects = message.query.filter(startDate < message.date_time, message.date_time <eod, message.slack_number == slackID).all()
-    elif (slackID == None):   
+    elif (slackID == "None"):   
         userObjects = message.query.filter(startDate < message.date_time, message.date_time <eod, message.channel_number == channelID).all()
     else:
         userObjects = message.query.filter(startDate < message.date_time, message.date_time <eod, message.channel_number == channelID, message.slack_number == slackID).all()
@@ -95,22 +95,14 @@ def index():
         submittedUser = form.userChoice.data
         userID = allUserData[submittedUser]
     else:
-        submittedUser = None
-        userID = None
-    #Datepicker
-    # if form.validate_on_submit(): #not validating so nothing is happening
-        
-    #     if len(form.userChoice.data) >2 :
-    #         submittedUser = form.userChoice.data
-    #         userID = allUserData[submittedUser]
-    #     else:
-    #         submittedUser = None
-    #         userID = None
-    # else:
-    #     theDate = datetime.strftime(date.today(), '%Y-%m-%d')
-
-    
-        
+        submittedUser = "None"
+        userID = "None"
+    if(form.channelChoice.data != 'None'):
+        submittedChannel = form.channelChoice.data
+        channelID = allChannelData[submittedChannel]
+    else:
+        submittedChannel = "None"
+        channelID = "None"
 
     # #ChannelPicker
     # formChannel = Select2TagForm(request.form) 
@@ -124,8 +116,6 @@ def index():
     #     channelID =  allChannelData['general']
 
     # #Queries messages for all given fields
-    submittedChannel = 'general'
-    channelID = allChannelData[submittedChannel]
     messageObjects = queryMessages(theDate,channelID,userID)
     
     
