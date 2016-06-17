@@ -2,6 +2,7 @@ from app.model import message_channel
 from datetime import datetime
 from slacker import Slacker
 from app import db, slackconnect
+from app.model import message_channel
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -9,8 +10,8 @@ from flask_sqlalchemy import SQLAlchemy
 class Channel(object):
     def __init__(self):
        self.channelInfo = []
-       self.table = mmessage_channel
-       self.allChannels
+       self.table = message_channel
+       self.allChannels = {}
 
     def getChannelInfo(self):
         responseObject = slackconnect.channels.list()
@@ -33,9 +34,8 @@ class Channel(object):
     #similar to getChannelInfo but returns in a different format
     def channelList(self):
         query = self.table.query.all()
-        channels = {}
         for channel in query:
             channelID = channel.channel_number
             channelName = channel.channel_name
-            channels[channelName] = channelID
-        return channels
+            self.allChannels[channelName] = channelID
+        return self.allChannels

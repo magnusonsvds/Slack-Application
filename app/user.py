@@ -10,6 +10,7 @@ class User(object):
         self.userInfo = []
         self.table = slack_user
         self.allUsers = []
+        self.names ={}
 
     def getUserInformation(self):
         responseObject = slackconnect.users.list()
@@ -35,7 +36,6 @@ class User(object):
     #similar ot getUserInformation but returns in a different format
     def userList(self):
         query = self.table.query.all()
-        names = {}
         for user in query:
             userID = user.slack_number
             userFirst = user.first_name
@@ -43,5 +43,5 @@ class User(object):
             name = userFirst + " " + userLast
             
             # added .title() after name to capitalize the first letter of fn and ln
-            names[name] = userID
-        return names
+            self.names[name] = userID
+        return self.names

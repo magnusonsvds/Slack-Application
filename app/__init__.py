@@ -26,7 +26,7 @@ app.config.update(dict(
 ))
 
 #slackconnect = Slacker(app.config["slack_api_token"])
-slackconnect = Slacker("xoxp-48585661490-48566956614-51370261810-32787fc5d7")
+slackconnect = Slacker("xoxp-48585661490-48566956614-52052862306-9480abf35f")
 
 from app import views
 from app.channel import Channel

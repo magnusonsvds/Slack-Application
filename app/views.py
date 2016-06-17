@@ -6,23 +6,51 @@ from app.channel import Channel
 from app.user import User
 from app.message_class import Message_Class
 from flask.ext.sqlalchemy import SQLAlchemy
+from wtforms import SelectMultipleField, SubmitField, DateField, SelectField
 
-from app.selectableChoices import SelectableChoices
 from flask_wtf import Form
 from wtforms import DateField
-from app.FormClasses import Select2TagForm
+#from app.FormClasses import Select2TagForm
+
+#Initilizing User and Channel as gloabl variables
+usr = User()
+ch = Channel()
+#Querying the database for all exsisting users and chanells, then returning them as an ordered dictionary
+allUserData = usr.userList()
+allChannelData = ch.channelList()
+
+#Formating dictionaries into a list of tuples for dropdown fields
+def formatDataForDropdown(dataDictionary):
+    avaliableSelections = [('None', 'None')]
+    for key in dataDictionary:
+        selection = (key, key)
+        avaliableSelections.append(selection)
+    return avaliableSelections
+
+#Form class that holds information on dt, user and channel fields.
+class Select2TagForm(Form):
+    dataUser = usr.names
+    userOptions = formatDataForDropdown(dataUser)
+
+    dataChannel = ch.allChannels
+    channelOptions = formatDataForDropdown(dataChannel)
+    userChoice = SelectField(u'Select User: ', choices = userOptions)
+    channelChoice = SelectField(u'Select Channel: ', choices = channelOptions)
+    dt = DateField('Pick a Date', format="%m/%d/%Y")
+
+
 
 #updateall of the users and channels into the database when someone vistis /index
 @app.before_request
 def before_request():
-    ch = Channel()
-    channels = ch.getChannelInfo()
-    usr = User()
-    users = usr.getUserInformation()
+    cha = Channel()
+    usa = User()
+    channels = cha.getChannelInfo()
+    users = usa.getUserInformation()
 
     userQuery = slack_user.query.all()
     if (len(userQuery) < len(users)) :
-        # Insert users in the user table
+        #Insert users in the user table
         usr.sendUsersToDatabase() 
 
     channelQuery = message_channel.query.all()
@@ -52,27 +80,12 @@ def queryMessages(startDate, channelID, slackID):
         userObjects = message.query.filter(startDate < message.date_time, message.date_time <eod, message.channel_number == channelID, message.slack_number == slackID).all()
     return userObjects
 
-def formatDataForDropdown(dataDictionary):
-    avaliableSelections = [('None', 'None')]
-    for key in dataDictionary:
-        selection = (key, key)
-        avaliableSelections.append(selection)
-    return avaliableSelections
-
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-    usr =User()
-    ch = Channel()
-    allUserData = User().userList()
-    allChannelData = Channel().channelList()
-    #selectable data for drop downs
-    selectableUserData = formatDataForDropdown(allUserData)
-    selectableChannelData = formatDataForDropdown(allChannelData)
     #Create a new form with user and channel form
-    form = Select2TagForm(request.form,usr, ch ) 
-    form.dataUser = selectableUserData  
+    form = Select2TagForm(request.form) 
     
     if (form.dt.data != None):
         theDate = form.dt.data.strftime('%Y-%m-%d') 
@@ -112,9 +125,7 @@ def index():
 
     # #Queries messages for all given fields
     submittedChannel = 'general'
-    submittedUser = None
     channelID = allChannelData[submittedChannel]
-    userID = None
     messageObjects = queryMessages(theDate,channelID,userID)
     
     
@@ -128,7 +139,7 @@ def index():
         messageStack = Message_Class().messageList(messageObjects, allUserData, submittedChannel, submittedUser, theDate)
 
     #return render_template('index.html', title="User Directory", USERS = allUserData, messageInfo = messageStack, formDate = formDate, formUser = formUser, formChannel = formChannel )
-    return render_template('index.html', title="User Directory", USERS = allUserData, messageInfo = messageStack, form =form, randomInfo =form.dataUser)
+    return render_template('index.html', title="User Directory", USERS = allUserData, messageInfo = messageStack, form =form, randomInfo =form.userChoice.data)
 
 
 @app.route('/user/<theUserID>:<userName>', methods=['GET','POST'])
