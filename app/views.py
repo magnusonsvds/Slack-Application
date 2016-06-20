@@ -70,7 +70,7 @@ def before_request():
 #By default channelID should be passed the general channel. Cant search just by date
 def queryMessages(startDate, channelID, slackID):
     eod = startDate + ' 23:59:59'
-    if ((channelID and slackID) == "None"):
+    if (channelID  == "None" and slackID == "None"):
         userObjects = message.query.filter(startDate < message.date_time, message.date_time <eod).all()
     elif ((channelID) == "None"):
         userObjects = message.query.filter(startDate < message.date_time, message.date_time <eod, message.slack_number == slackID).all()
@@ -104,18 +104,7 @@ def index():
         submittedChannel = "None"
         channelID = "None"
 
-    # #ChannelPicker
-    # formChannel = Select2TagForm(request.form) 
-    # formChannel.data = selectableChannelData
-    # if formChannel.validate_on_submit():
-    #     submittedChannel = formChannel.tags.data()
-    #     #current_app.logger.debug(channelForm.tags.data)
-    #     channelID = allChannelData[submittedChannel]
-    # else:
-    #     submittedChannel = 'general'
-    #     channelID =  allChannelData['general']
-
-    # #Queries messages for all given fields
+    #call for the messages
     messageObjects = queryMessages(theDate,channelID,userID)
     
     
