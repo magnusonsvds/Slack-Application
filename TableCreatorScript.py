@@ -27,8 +27,10 @@ def insertData(users, channels):
 
 	ch = Channel()
 	usr = User()
-	ch.sendChannelsToDatabase() 
-	usr.sendUsersToDatabase()
+	ch.getChannelInfo()
+	usr.getUserInformation()
+	ch.sendChannelsToDatabase(True) 
+	usr.sendUsersToDatabase(True)
 	db.session.commit()  
 
 if __name__ == '__main__':

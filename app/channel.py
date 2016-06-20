@@ -5,7 +5,7 @@ from app import db, slackconnect
 from app.model import message_channel
 
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+
 
 class Channel(object):
     def __init__(self):
@@ -13,6 +13,7 @@ class Channel(object):
        self.table = message_channel
        self.allChannels = {}
 
+    #Retrives all of the channel information
     def getChannelInfo(self):
         responseObject = slackconnect.channels.list()
         responseChannelList = responseObject.body["channels"]
@@ -23,13 +24,17 @@ class Channel(object):
             self.channelInfo.append(chanInfo)
         return self.channelInfo
 
-    def sendChannelsToDatabase(self):
+    #Push all of the channels to the database
+    def sendChannelsToDatabase(self, populate):
         for channel in self.channelInfo:
             channelNum = channel[0]
             channelName = channel[1]
 
             new_channel = message_channel(channelNum, channelName)
-            db.session.merge(new_channel)
+            if populate:
+                db.session.add(new_channel)
+            else:
+                db.session.merge(new_channel)
 
     #similar to getChannelInfo but returns in a different format
     def channelList(self):

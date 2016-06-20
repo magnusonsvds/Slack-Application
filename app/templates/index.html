@@ -45,18 +45,6 @@
 	</script>
 
 
-<h2>Users</h2>
-{{randomInfo}}
-	{% for userKey in USERS %}
-		<p>
-			{{userKey.first_name}}
-		</p>
-		<ul>
-			<li><a href="{{ url_for('user', theUserID=userKey[USERS], userName=userKey)}}">{{userKey}}</a></li>
-		</ul>
-	
-	{% endfor %}
-
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/scripts.js"></script>

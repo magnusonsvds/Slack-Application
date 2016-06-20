@@ -9,13 +9,12 @@ from flask_sqlalchemy import SQLAlchemy
 
 class Message_Class(object):
     def __init__(self):
-    	messageLogInfo = []
     	self.ListOfMessages = []
-
-    def getMessageInfo(self,channel):
-        responseObject = slackconnect.channels.history(channel)
+   
+    #Gets messages from Slack from since last timestamp
+    def getMessageInfo(self,channel, date):
+        responseObject = slackconnect.channels.history(channel, latest = date)
         responseDict = responseObject.body["messages"]
-        #print (responseDict)
 
         messageLogInfo = []
         for i in responseDict:
@@ -27,6 +26,7 @@ class Message_Class(object):
             messageLogInfo.append(messageInfo)
         return messageLogInfo
 
+    #pushes the messages to the database
     def sendMessagesToDatabase(self, messageLogInfo):
         for mess in messageLogInfo:
             userNum = mess[0]
@@ -35,7 +35,22 @@ class Message_Class(object):
             channelNum = mess[3]
 
             new_message = message(date, text, userNum, channelNum)
-            db.session.add(new_message)
+            db.session.merge(new_message)
+
+    #Queries for messages given the filters 
+    def queryMessages(self, startDate, channelID, slackID):
+        eod = startDate + ' 23:59:59'
+        if (channelID  == "None" and slackID == "None"):
+            messageObjects = message.query.filter(startDate < message.date_time, message.date_time <eod).all()
+        elif ((channelID) == "None"):
+            messageObjects = message.query.filter(startDate < message.date_time, message.date_time <eod, message.slack_number == slackID).all()
+        elif (slackID == "None"):   
+            messageObjects = message.query.filter(startDate < message.date_time, message.date_time <eod, message.channel_number == channelID).all()
+        else:
+            messageObjects = message.query.filter(startDate < message.date_time, message.date_time <eod, message.channel_number == channelID, message.slack_number == slackID).all()
+        return messageObjects
+
+    #Organizes a list of all the messages into a list of lists
     def messageList(self, messageObjects, userObjects, channel, user, theDate):
         messageStack = []
         messagedUsers = userObjects
@@ -63,9 +78,10 @@ class Message_Class(object):
             for user in messagedUsers:
                 individualMessage = [" ", channel, theDate, user]
                 messageStack.append(individualMessage)
-
         else: pass
 
         return messageStack
+
+    #converts timestamp to datetime
     def datetimeChange(self, timestamp):
         return datetime.fromtimestamp(float(timestamp))

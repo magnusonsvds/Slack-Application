@@ -1,9 +1,6 @@
-import os
+import os, configparser
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
-#from config import basedir
-
-from datetime import datetime
 
 from flask_sqlalchemy import SQLAlchemy
 from slacker import Slacker
@@ -16,17 +13,14 @@ app = Flask(__name__)
 app.route
 Bootstrap(app)
 db = SQLAlchemy(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1Svds@123@localhost/slacktestdb'
 
+app.config.from_pyfile('config_file.cfg')
+app.config['SQLALCHEMY_DATABASE_URI']
+app.config['CSRF_ENABLED']
+app.config['SECRET_KEY']
+app.config['DEBUG']
 
-app.config.update(dict(
-    DEBUG=True,
-    SECRET_KEY='development key',
-    CSRF_ENABLED = True,
-))
-
-#slackconnect = Slacker(app.config["slack_api_token"])
-slackconnect = Slacker("xoxp-48585661490-48566956614-52036521395-37606d382b")
+slackconnect = Slacker(app.config['SLACK_API_TOKEN'])
 
 from app import views
 from app.channel import Channel

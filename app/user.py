@@ -12,6 +12,7 @@ class User(object):
         self.allUsers = []
         self.names ={}
 
+    #retrives all of the user information
     def getUserInformation(self):
         responseObject = slackconnect.users.list()
         responseMemberList = responseObject.body["members"]
@@ -24,14 +25,19 @@ class User(object):
             self.userInfo.append(memberInfo)
         return self.userInfo
 
-    def sendUsersToDatabase(self):
+    #pushes all of the users to a database
+    def sendUsersToDatabase(self, populate):
+        
         for user in self.userInfo:
             userNum = user[0]
             userFirst = user[1]
             userLast = user[2]
 
             new_user = slack_user(userNum, userFirst, userLast)
-            db.session.merge(new_user)
+            if populate:
+                db.session.add(new_user)
+            else:
+                db.session.merge(new_user)
 
     #similar ot getUserInformation but returns in a different format
     def userList(self):
