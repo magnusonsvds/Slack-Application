@@ -2,7 +2,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-			
+<style>
+	background-color: white;
+	opacity: 0.8;
+</style>
+		<div id="body">	
 			<form action="" method="post" >
     			{{form.hidden_tag()}}
    				 <p>
@@ -35,8 +39,7 @@
 				{% endfor %}
 			</table>
 		</div>
-	</div>
-</div>
+
 <script type="text/javascript">
 	$(document).ready(function() {
 		// https://select2.github.io/examples.html
