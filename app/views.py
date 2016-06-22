@@ -22,7 +22,7 @@ allChannelData = ch.channelList()
 
 #Formating dictionaries into a list of tuples for dropdown fields
 def formatDataForDropdown(dataDictionary):
-    avaliableSelections = [('None', 'None')]
+    avaliableSelections = [('None', 'All')]
     for key in dataDictionary:
         selection = (key, key)
         avaliableSelections.append(selection)
@@ -124,9 +124,9 @@ def index():
         selectionChoices[2])
     
     #Takes array of messages, userInformation(GLOBAL VARIABLE), channel selection, user 
-    #selection and date selection. Orders them into a list of lists
+    #selection date selection and dict of channelIDS. Orders them into a list of lists
     messageStack = Message_Class().messageList(messageObjects, allUserData,
-        selectionChoices[3], selectionChoices[4], selectionChoices[0])
+        selectionChoices[3], selectionChoices[4], selectionChoices[0], ch.reverseChannelLookup)
 
     #returns a render template object to pass items onto html templates
     return render_template('index.html', title="User Directory", messageInfo = messageStack,

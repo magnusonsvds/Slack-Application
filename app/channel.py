@@ -12,6 +12,7 @@ class Channel(object):
        self.channelInfo = []
        self.table = message_channel
        self.allChannels = {}
+       self.reverseChannelLookup = {}
 
     #Retrives all of the channel information
     def getChannelInfo(self):
@@ -35,7 +36,6 @@ class Channel(object):
                 db.session.add(new_channel)
             else:
                 db.session.merge(new_channel)
-
     #similar to getChannelInfo but returns in a different format
     def channelList(self):
         query = self.table.query.all()
@@ -43,4 +43,5 @@ class Channel(object):
             channelID = channel.channel_number
             channelName = channel.channel_name
             self.allChannels[channelName] = channelID
+            self.reverseChannelLookup[channelID] = channelName
         return self.allChannels

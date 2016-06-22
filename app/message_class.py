@@ -3,7 +3,7 @@ from slacker import Slacker
 from app import db, slackconnect
 from datetime import timedelta
 from app.model import message, slack_user
-from flask import Flask
+from flask import Flask, Request
 from flask_sqlalchemy import SQLAlchemy
 
 class Message_Class(object):
@@ -52,7 +52,7 @@ class Message_Class(object):
         return messageObjects
 
     #Organizes a list of all the messages into a list of lists
-    def messageList(self, messageObjects, userObjects, channel, user, theDate):
+    def messageList(self, messageObjects, userObjects, channel, user, theDate, channelIDNumber):
         messageStack = []
         messagedUsers = userObjects.copy()
 
@@ -77,18 +77,19 @@ class Message_Class(object):
                 	del(messagedUsers[userName])
 
                 #Query the message_channel table to find the channel name
-                channelName = channel
+                channelName = channelIDNumber[channelNum]
                 messageDate = self.datetimeChange(messageDate, True)
+                
                 #append Message
                 individualMessage = [messageText, channelName, messageDate, userName]
                 messageStack.append(individualMessage)
 
                 selectedDate = self.datetimeChange(theDate, True)
 
-                if (user == 'None'):
-                    for user in messagedUsers:
-                        individualMessage = [" ", channel, selectedDate, user]
-                        messageStack.append(individualMessage)
+            if (user == 'None'):
+                 for theUser in messagedUsers:
+                     individualMessage = [" ", channel, " ", theUser]
+                     messageStack.append(individualMessage)
             else: pass
 
             return messageStack
@@ -97,6 +98,6 @@ class Message_Class(object):
     def datetimeChange(self, timestamp, seconds):
         date = datetime.fromtimestamp(float(timestamp))
         if(seconds):
-            return date
+            return date.strftime('%-I:%M:%S %p')
         else:
             return date.strftime('%m/%d/%Y')
