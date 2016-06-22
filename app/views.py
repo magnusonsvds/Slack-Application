@@ -7,7 +7,7 @@ from app.user import User
 from app.message_class import Message_Class
 from flask.ext.sqlalchemy import SQLAlchemy
 from wtforms import SelectMultipleField, SubmitField, DateField, SelectField
-
+from sqlalchemy import desc
 from flask_wtf import Form
 from wtforms import DateField
 import time
@@ -42,8 +42,7 @@ class Select2TagForm(Form):
 
 
 #Updates tables that need to be updated before loading a page
-@app.before_request
-def before_request():
+def before_Pageload():
     #Initilizing chanel, user and message objects
     cha = Channel()
     usa = User()
@@ -66,73 +65,68 @@ def before_request():
         ch.sendChannelsToDatabase(False) 
     
     #Querying the message table for the last date time a message was posted
-    lastMessageDate = message.query.order_by('date_time').first()
-    if lastMessageDate == None:
+    lastMessageTimestamp = message.query.order_by(desc(('date_time'))).first()
+    if lastMessageTimestamp == None:
         #convert date to a timestamp
-        lastMessageDate = datetime.strftime(date.today(), '%Y-%m-%d')
-        lastMessageTimestamp = time.mktime(datetime.strptime(lastMessageDate,
-            "%Y-%m-%d").timetuple())
+        dateTimeToday = date.today()
+        lastMessageTimestamp =  dateTimeToday.strftime('%s')
+        lastMessageTimestamp = int(lastMessageTimestamp)
     else:
-        #convert datetime to a timestamp
-        lastMessageTimestamp = lastMessageDate.date_time.timestamp()
-
+        lastMessageTimestamp = lastMessageTimestamp.date_time
     #Get messageObjects from slack and send them to the database
     for channelIdNumber in channelQuery:
         slackMessages = msg.getMessageInfo(channelIdNumber.channel_number, lastMessageTimestamp)
         #Insert messages in the the message table
-        msg.sendMessagesToDatabase(slackMessages)
+
+        if(slackMessages != None):
+            msg.sendMessagesToDatabase(slackMessages)
     #Commit the inserts
     db.session.commit() 
 
 
 #Returns the selection choices for date, time and user and handles no entry
 def loadChoices(form):
-     
     #Checking if no date entered, Display current date as default
     if (form.dt.data != None):
-        theDate = form.dt.data.strftime('%Y-%m-%d') 
+        theDate = form.dt.data.strftime('%s') 
+        theDate = int(theDate)
     else:
-        theDate = datetime.strftime(date.today(), '%Y-%m-%d')
+        dateTimeToday = date.today()
+        theDate =  dateTimeToday.strftime('%s')
+        theDate = int(theDate)
     #Checking if no user has been selected
     if (form.userChoice.data != 'None') :
         submittedUser = form.userChoice.data
         userID = allUserData[submittedUser]
     else:
-        submittedUser = "None"
-        userID = "None"
+        submittedUser = 'None'
+        userID = 'None'
     #Checks if a channel has been selected
     if(form.channelChoice.data != 'None'):
         submittedChannel = form.channelChoice.data
         channelID = allChannelData[submittedChannel]
     else:
-        submittedChannel = "None"
-        channelID = "None"
-    choices = [theDate, channelID, userID, submittedChannel]
+        submittedChannel = 'None'
+        channelID = 'None'
+    choices = [theDate, channelID, userID, submittedChannel, submittedUser]
     return choices
 
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
+    before_Pageload()
     form = Select2TagForm(request.form)
     #Create a new form with user, date and channel fields
     selectionChoices = loadChoices(form)
     #call for messages from database (DATE TIME, CHANNEL IDENTIFICATION, USER IDENTIFICATION)
     messageObjects = Message_Class().queryMessages(selectionChoices[0],selectionChoices[1], 
         selectionChoices[2])
-    #Store all of the individual messages in an array
-    messageStack = []
-
-    #If user does not have any messages for selected date or channel, display a message
-    if len(messageObjects) == 0:
-        individualMessage = ["There are no messages on " + selectionChoices[0] + " in channel: " +
-            selectionChoices[3], "", "", ""]
-        messageStack.append(individualMessage)
-    else:
-        #Takes array of messages, userInformation(GLOBAL VARIABLE), channel selection, user 
-        #selection and date selection. Orders them into a list of lists
-        messageStack = Message_Class().messageList(messageObjects, allUserData,
-            sselectionChoices[1], selectionChoices[2], selectionChoices[0])
+    
+    #Takes array of messages, userInformation(GLOBAL VARIABLE), channel selection, user 
+    #selection and date selection. Orders them into a list of lists
+    messageStack = Message_Class().messageList(messageObjects, allUserData,
+        selectionChoices[3], selectionChoices[4], selectionChoices[0])
 
     #returns a render template object to pass items onto html templates
     return render_template('index.html', title="User Directory", messageInfo = messageStack,

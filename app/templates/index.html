@@ -2,13 +2,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<style>
-#body {
-	background-color: white;
-	opacity: 0.8;
-}
-</style>
-		<div id="body">	
+
+
+
 			<form action="" method="post" >
     			{{form.hidden_tag()}}
    				 <p>
@@ -40,14 +36,6 @@
 				</tbody>
 				{% endfor %}
 			</table>
-		</div>
-
-<script type="text/javascript">
-	$(document).ready(function() {
-		// https://select2.github.io/examples.html
-		$(".tags-select").select2({});
-	});
-	</script>
 
 
     <script src="js/jquery.min.js"></script>

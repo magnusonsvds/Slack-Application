@@ -39,15 +39,13 @@ class message_channel(db.Model):
 #Message table
 class message(db.Model):
     ID = db.Column(db.Integer, db.Sequence('user_id_seq'), primary_key=True)
-    date_time = db.Column(db.DateTime)
+    date_time = db.Column(db.Integer)
     msg = db.Column(db.String(2000))
     slack_number = db.Column(db.String(50))
     channel_number = db.Column(db.String(50))
     #__table_args__ = (db.UniqueConstraint('msg', 'date_time','slack_number', name='unique_message'),)
 
     def __init__(self, date_time, msg, slack_number, channel_number):
-        if date_time is None:
-            date_time = datetime.utcnow()
         self.date_time = date_time
         self.msg = msg
         self.slack_number = slack_number
