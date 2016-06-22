@@ -99,4 +99,4 @@ class Message_Class(object):
         if(seconds):
             return date
         else:
-            return date.strftime('%d-%m-%Y')
+            return date.strftime('%m/%d/%Y')
