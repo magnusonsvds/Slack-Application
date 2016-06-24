@@ -2,19 +2,39 @@
 {% extends "base.html" %}
 
 {% block content %}
-			
-			<form action="" method="post" >
+<style>
+#body {
+	background-color: white;
+	opacity: 0.8;
+}
+</style>
+
+<div class="container-fluid">
+	<div id="body" class="row">
+		<div class="col-md-12">
+			<div class="row">
+				<form action="" method="post" >
     			{{form.hidden_tag()}}
-   				 <p>
-   				 	{{form.dt(class="dtpick")}}
-        			{{form.userChoice()}}
-        			{{form.channelChoice()}}
-    			</p>
-    			<button type="submit">Go</button>
-			</form>
-				
-			
-			<table class="table table-condensed table-hover table-bordered">
+					<div class="col-md-4">
+						<div class="btn-group">
+							<button data-toggle="dropdown" class="btn btn-default dropdown-toggle">
+								{{form.dt(class="dtpick")}}
+							</button>
+							<button data-toggle="dropdown" class="btn btn-default dropdown-toggle">
+								{{form.userChoice()}}
+							</button>
+							<button data-toggle="dropdown" class="btn btn-default dropdown-toggle">
+								{{form.channelChoice()}}
+							</button>
+							<button type="submit" class="btn btn-default">
+								Submit
+							</button>  
+						</div>
+					</div>
+				</form>
+
+
+			<center><table class="table table-striped table-responsive">
 				<thead>
 					<tr>
 						<th>User</th>
@@ -29,54 +49,26 @@
 						<td>{{ message[3] }}</td>
 						<td>{{ message[0] }}</td>
 						<td>{{ message[1] }}</td>
-						<td>
-
-						<!-- what to do with this and the for loop-->
-							<!-- {{ message[2] }} -->
-
-
-							<div class="container">
-								<!-- Trigger the modal with a button -->
-								<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Messages</button>
-								<!-- Modal -->
-								  <div class="modal fade" id="myModal" role="dialog">
-								    <div class="modal-dialog">
-								    
-								      <!-- Modal content-->
-								      <div class="modal-content">
-								        <div class="modal-header">
-								          <button type="button" class="close" data-dismiss="modal">&times;</button>
-								          <h4 class="modal-title">Modal Header</h4>
-								        </div>
-								        <div class="modal-body">
-								          <p>Some text in the modal.</p>
-								        </div>
-								        <div class="modal-footer">
-								          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-								        </div>
-								      </div>
-								      
-								    </div>
-								  </div>
-							</div>
-
-						</td>
+						<td>{{ message[2] }}</td>
 					</tr>
 				</tbody>
 				{% endfor %}
-			</table>
+			</table></center>
+
 		</div>
 	</div>
 </div>
+
 <script type="text/javascript">
 	$(document).ready(function() {
 		// https://select2.github.io/examples.html
 		$(".tags-select").select2({});
 	});
-	</script>
+</script>
 
 
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/scripts.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/scripts.js"></script>
+
 {% endblock %}
