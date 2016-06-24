@@ -5,6 +5,7 @@ from datetime import timedelta
 from app.model import message, slack_user
 from flask import Flask, Request
 from flask_sqlalchemy import SQLAlchemy
+from operator import itemgetter
 
 class Message_Class(object):
     def __init__(self):
@@ -53,7 +54,7 @@ class Message_Class(object):
 
     #Organizes a list of all the messages into a list of lists
     def messageList(self, messageObjects, userObjects, channel, user, theDate, channelIDNumber):
-        messageStack = []
+        messageStack = {}
         messagedUsers = userObjects.copy()
 
         #If user does not have any messages for selected date or channel, display a message
@@ -61,6 +62,7 @@ class Message_Class(object):
             individualMessage = ["There are no messages on " + str(self.datetimeChange(theDate,  False))+ " in channel: " +
             channel, "", "", ""]
             messageStack.append(individualMessage)
+
             return messageStack
         else: 
             for mess in messageObjects:
@@ -82,16 +84,22 @@ class Message_Class(object):
                 
                 #append Message
                 individualMessage = [messageText, channelName, messageDate, userName]
-                messageStack.append(individualMessage)
+                if userName in messageStack:
+                    messageStack[userName] = messaeStack[userName] + individualMessage
+                else:
+                    messageStack[userName] = individualMessage
 
-                selectedDate = self.datetimeChange(theDate, True)
-
+            #Checking if the selection for users was 'all' and adding thoose who never commented 
+            #in that channel for the day
             if (user == 'None'):
-                 for theUser in messagedUsers:
+                for theUser in messagedUsers:
                      individualMessage = [" ", channel, " ", theUser]
-                     messageStack.append(individualMessage)
+                     messageStack[userName] = individualMessage
+            #dictionary with first and other
+            #first holds an array with all the info, other holds an array of arrays with all the info
+                #if already entered into database then add to an array of arrays for other messages 
             else: pass
-
+            messageStack = sorted(messageStack, key = itemgetter(3))
             return messageStack
 
     #converts timestamp to datetime
