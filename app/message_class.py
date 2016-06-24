@@ -85,7 +85,7 @@ class Message_Class(object):
                 #append Message
                 individualMessage = [messageText, channelName, messageDate, userName]
                 if userName in messageStack:
-                    messageStack[userName] = messaeStack[userName] + individualMessage
+                    messageStack[userName] = messageStack[userName] + individualMessage
                 else:
                     messageStack[userName] = individualMessage
 
