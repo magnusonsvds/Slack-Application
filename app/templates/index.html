@@ -9,6 +9,10 @@
   	opacity: 0.85;
   .modal-backdrop.in { z-index: -1;}
   }
+  table{
+  	table-layout: fixed;
+  	word-wrap: break-word;
+  }
 </style>
 
 <div class="container-fluid">
@@ -39,21 +43,23 @@
 			<center><table class="table table-bordered table-striped">
 				<thead>
 					<tr>
-						<th width="25%">User</th>
-						<th width="25%">Channel</th>
-						<th width="25%">Time</th>
-						<th width="25%">Message</th>
+						<th width="22%">User</th>
+						<th width="20%">Channel</th>
+						<th width="13%">Time</th>
+						<th width="45%">Message</th>
 					</tr>
 				</thead>
+				{% set count = 0 %}
 				{% for key in messageInfo.keys() %}
+				{% set count = count + 1 %}
 				<tbody>
 					<tr>
-						<td>{{ messageInfo[key][3]}}</td>
-						<td>{{ messageInfo[key][1]}}</td>
-						<td>{{ messageInfo[key][2]}}</td>
-						<td>{{ messageInfo[key][0]}}
+						<td width ="22%">{{ messageInfo[key][3]}}</td>
+						<td width ="20%">{{ messageInfo[key][1]}}</td>
+						<td width ="13%">{{ messageInfo[key][2]}}</td>
+						<td width ="45%">{{ messageInfo[key][0]}}
 						{% for i in range (4, messageInfo[key]|length) if user !='None' %}
-							</td> </tr> this shouldnt pop up
+							</td> </tr> 
 							<tbody>
 								<tr>
 									<td>{{ messageInfo[key][i][3] }}</td>
@@ -66,13 +72,13 @@
 							{% if messageInfo[key]|length > 4 and user == 'None'%}
 								
 									<!-- Trigger the modal with a button -->
-									<div align="left"><button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">Messages</button></div>
+									<div align="left"><button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal{{count|string}}">Messages</button></div>
 							
 							
 								<div class="container">
 									<!-- Modal -->
-									<div class="modal fade" id="myModal" role="dialog" data-backdrop ="false">
-										<div class="modal-dialog">
+									<div class="modal fade" id="myModal{{count|string}}" role="dialog" data-backdrop ="false">
+										<div class="modal-dialog" id = "{{count|string}}">
 
 
 									 	 <!-- Modal content-->
@@ -83,8 +89,8 @@
 									      			<h4 class="modal-title">{{userName}}</h4>
 									    		</div>
 									   			<div class="modal-body">
-									   				<table class="table table-striped" id="tblGr">
-											            <thead id="tblH">
+									   				<table class="table table-striped" id="yes">
+											            <thead id="yes">
 											              <tr>
 											                <th>Channel</th>
 											                <th>Time</th>
@@ -119,7 +125,7 @@
 				</table> -->
 						
 						
-					{% endfor %}
+				{% endfor %}
 			</center></table>
 
 		</div>
