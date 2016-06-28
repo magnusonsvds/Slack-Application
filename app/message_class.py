@@ -5,7 +5,7 @@ from datetime import timedelta
 from app.model import message, slack_user
 from flask import Flask, Request
 from flask_sqlalchemy import SQLAlchemy
-from operator import itemgetter
+import collections, sys
 
 class Message_Class(object):
     def __init__(self):
@@ -18,7 +18,7 @@ class Message_Class(object):
         responseDict = responseObject.body["messages"]
 
         messageLogInfo = []
-        for i in responseDict[0:len(responseDict)-1 ]:
+        for i in responseDict[0:len(responseDict)-1]:
             message = i
             text = message["text"]
             user = message["user"]
@@ -54,14 +54,14 @@ class Message_Class(object):
 
     #Organizes a list of all the messages into a list of lists
     def messageList(self, messageObjects, userObjects, channel, user, theDate, channelIDNumber):
-        messageStack = {}
+        messageStack = collections.OrderedDict()
         messagedUsers = userObjects.copy()
-
+        
         #If user does not have any messages for selected date or channel, display a message
         if len(messageObjects) == 0:
             individualMessage = ["There are no messages on " + str(self.datetimeChange(theDate,  False))+ " in channel: " +
             channel, "", "", ""]
-            messageStack.append(individualMessage)
+            messageStack['none'] = individualMessage
 
             return messageStack
         else: 
@@ -78,28 +78,33 @@ class Message_Class(object):
                 if(userName in messagedUsers):
                 	del(messagedUsers[userName])
 
-                #Query the message_channel table to find the channel name
+        #Query the message_channel table to find the channel name
                 channelName = channelIDNumber[channelNum]
                 messageDate = self.datetimeChange(messageDate, True)
-                
+              
                 #append Message
                 individualMessage = [messageText, channelName, messageDate, userName]
-                if userName in messageStack:
-                    messageStack[userName] = messageStack[userName] + individualMessage
+                #print("uxers  " + str(individualMessage), file=sys.stderr)
+                
+                if userName in messageStack.keys():
+                    #item = messageStack[userName] + individualMessage
+                    messageStack[userName].append(individualMessage)
+                    #messageStack.update({userName : item}) 
                 else:
                     messageStack[userName] = individualMessage
-
+               # print(' THis is the message stack ' + str(messageStack), file=sys.stderr)
             #Checking if the selection for users was 'all' and adding thoose who never commented 
             #in that channel for the day
             if (user == 'None'):
                 for theUser in messagedUsers:
                      individualMessage = [" ", channel, " ", theUser]
-                     messageStack[userName] = individualMessage
+                     messageStack[theUser] = individualMessage
             #dictionary with first and other
             #first holds an array with all the info, other holds an array of arrays with all the info
                 #if already entered into database then add to an array of arrays for other messages 
             else: pass
-            messageStack = sorted(messageStack, key = itemgetter(3))
+            #messageStack = messageStack.sort()
+            
             return messageStack
 
     #converts timestamp to datetime

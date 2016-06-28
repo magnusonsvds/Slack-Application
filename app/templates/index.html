@@ -7,6 +7,7 @@
   h3 {color:grey;}
   #rows {
   	opacity: 0.85;
+  .modal-backdrop.in { z-index: -1;}
   }
 </style>
 
@@ -38,73 +39,92 @@
 			<center><table class="table table-bordered table-striped">
 				<thead>
 					<tr>
-						<th>User</th>
-						<th>Channel</th>
-						<th>Time</th>
-						<th>Message</th>
+						<th width="25%">User</th>
+						<th width="25%">Channel</th>
+						<th width="25%">Time</th>
+						<th width="25%">Message</th>
 					</tr>
 				</thead>
-				{% for userName in messageInfo %}
+				{% for key in messageInfo.keys() %}
 				<tbody>
 					<tr>
-						<td>{{ messageInfo[userName][0][3] }}</td>
-						<td>{{ messageInfo[userName][0][1] }}</td>
-						<td>{{ messageInfo[userName][0][2] }}</td>
-						<td>{{ messageInfo[userName][0][0] }}
-						{% if messageInfo[userName]|length > 1 %}
-						<div class="container">
-								<!-- Trigger the modal with a button -->
-								<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Messages</button>
-								<!-- Modal -->
-								  <div class="modal fade" id="myModal" role="dialog">
-								    <div class="modal-dialog">
-								    
-								      <!-- Modal content-->
-								      <div class="modal-content">
-								        <div class="modal-header">
-								          <button type="button" class="close" data-dismiss="modal">&times;</button>
-								          <h4 class="modal-title">{{userName}}</h4>
-								        </div>
-								        <div class="modal-body">
-								          <p>{%for i in range(1, messageInfo[userName]|length) %}
-								          	<tbody>
-												<tr>
-													<td>{{ messageInfo[userName][i][3] }}</td>
-													<td>{{ messageInfo[userName][i][1] }}</td>
-													<td>{{ messageInfo[userName][i][2] }}</td>
-													<td>{{ messageInfo[userName][i][0] }}</td>
-												</tr>
-											</tbody>
-								          {%endfor%}</p>
-								        </div>
-								        <div class="modal-footer">
-								          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-								        </div>
-								      </div>
-								      
-								    </div>
-								  </div>
-							</div>
+						<td>{{ messageInfo[key][3]}}</td>
+						<td>{{ messageInfo[key][1]}}</td>
+						<td>{{ messageInfo[key][2]}}</td>
+						<td>{{ messageInfo[key][0]}}
+						{% for i in range (4, messageInfo[key]|length) if user !='None' %}
+							</td> </tr> this shouldnt pop up
+							<tbody>
+								<tr>
+									<td>{{ messageInfo[key][i][3] }}</td>
+									<td>{{ messageInfo[key][i][1] }}</td>
+									<td>{{ messageInfo[key][i][2] }}</td>
+									<td>{{ messageInfo[key][i][0] }} </td>
+								</tr>
+							</tbody>
+						{%endfor%}
+							{% if messageInfo[key]|length > 4 and user == 'None'%}
+								
+									<!-- Trigger the modal with a button -->
+									<div align="left"><button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">Messages</button></div>
+							
+							
+								<div class="container">
+									<!-- Modal -->
+									<div class="modal fade" id="myModal" role="dialog" data-backdrop ="false">
+										<div class="modal-dialog">
 
-						</td>
-						{% endif %}
-					</tr>
-					</tr>
-				</tbody>
-				{% endfor %}
-			</table></center>
+
+									 	 <!-- Modal content-->
+									  		<div class="modal-content">
+									    		<div class="modal-header">
+									    		More Messages
+									      			<button type="button" class="close" data-dismiss="modal">&times;</button>
+									      			<h4 class="modal-title">{{userName}}</h4>
+									    		</div>
+									   			<div class="modal-body">
+									   				<table class="table table-striped" id="tblGr">
+											            <thead id="tblH">
+											              <tr>
+											                <th>Channel</th>
+											                <th>Time</th>
+											                <th>Message</th>
+											              </tr>
+											            </thead>
+											            <tbody>
+											      			{% for i in range (4, messageInfo[key]|length) %}
+																
+																	<tr>
+																		<td>{{ messageInfo[key][i][1] }}</td>
+																		<td>{{ messageInfo[key][i][2] }}</td>
+																		<td>{{ messageInfo[key][i][0] }} </td>
+																	</tr>
+												   			{%endfor%}
+														</tbody>
+													</table>
+									    		</div>
+									    		<div class="modal-footer">
+									      			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									    		</div>
+
+									  		</div> 
+										</div>
+									</div>
+								</div>
+
+								</td>
+							</tr>
+							{% endif %}
+					<!--</tbody>
+				</table> -->
+						
+						
+					{% endfor %}
+			</center></table>
 
 		</div>
 	</div>
 </div>
-
-<script type="text/javascript">
-	$(document).ready(function() {
-		// https://select2.github.io/examples.html
-		$(".tags-select").select2({});
-	});
-</script>
-
-
+</tbody>
 
 {% endblock %}

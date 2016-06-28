@@ -56,13 +56,13 @@ def before_Pageload():
     #Comparing information from slack and query from databse, to see if an update is needed
     if (len(userQuery) < len(users)) :
         #Insert users in the user table
-        usr.sendUsersToDatabase(False) 
+        usa.sendUsersToDatabase(False) 
     #Querying the database for all channels
     channelQuery = message_channel.query.all()
     #Comparing information from slack and query from databse, to see if an update is needed
     if (len(channelQuery) < len(channels)) :
         # Insert channels in the channel table
-        ch.sendChannelsToDatabase(False) 
+        cha.sendChannelsToDatabase(False) 
     
     #Querying the message table for the last date time a message was posted
     lastMessageTimestamp = message.query.order_by(desc(('date_time'))).first()
@@ -86,6 +86,7 @@ def before_Pageload():
 
 #Returns the selection choices for date, time and user and handles no entry
 def loadChoices(form):
+    before_Pageload()
     #Checking if no date entered, Display current date as default
     if (form.dt.data != None):
         theDate = form.dt.data.strftime('%s') 
@@ -112,10 +113,9 @@ def loadChoices(form):
     return choices
 
 
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/index', methods=['GET', 'POST'])
+@app.route('/', methods=['POST'])
+@app.route('/index', methods=['POST'])
 def index():
-    before_Pageload()
     form = Select2TagForm(request.form)
     #Create a new form with user, date and channel fields
     selectionChoices = loadChoices(form)
@@ -130,4 +130,4 @@ def index():
 
     #returns a render template object to pass items onto html templates
     return render_template('index.html', title="User Directory", messageInfo = messageStack,
-        form =form)
+        form =form, user = selectionChoices[4])
