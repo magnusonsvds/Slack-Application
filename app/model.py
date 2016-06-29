@@ -10,7 +10,7 @@ class slack_user(db.Model):
     #include the line: __tablename__ = 'slack_user'  ????
     # define columns for the table person
     ID = db.Column(db.Integer, primary_key=True)
-    slack_number = db.Column(db.String(50), unique=True)
+    slack_number = db.Column(db.String(50), index=True, unique=True)
     first_name = db.Column(db.String(50))
     last_name = db.Column(db.String(50))
 
@@ -26,7 +26,7 @@ class slack_user(db.Model):
 class message_channel(db.Model):
     # Here we define columns for the table address.
     ID = db.Column(db.Integer, db.Sequence('user_id_seq'), primary_key=True)
-    channel_number = db.Column(db.String(50), unique=True)
+    channel_number = db.Column(db.String(50), index=True, unique=True)
     channel_name = db.Column(db.String(50))
 
     def __init__(self, channel_number, channel_name):
@@ -41,8 +41,8 @@ class message(db.Model):
     ID = db.Column(db.Integer, db.Sequence('user_id_seq'), primary_key=True)
     date_time = db.Column(db.Integer)
     msg = db.Column(db.String(2000))
-    slack_number = db.Column(db.String(50))
-    channel_number = db.Column(db.String(50))
+    slack_number = db.Column(db.String(50), index=True)
+    channel_number = db.Column(db.String(50), index=True)
     #__table_args__ = (db.UniqueConstraint('msg', 'date_time','slack_number', name='unique_message'),)
 
     def __init__(self, date_time, msg, slack_number, channel_number):
