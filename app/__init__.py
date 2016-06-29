@@ -6,14 +6,19 @@ from slacker import Slacker
 from flask_bootstrap import Bootstrap
 
 
+app = Flask(__name__, instance_relative_config=True)
 
-app = Flask(__name__)
-#app.config.from_object('config')
 app.route
 Bootstrap(app)
 db = SQLAlchemy(app)
 
-app.config.from_pyfile('config_file.cfg')
+#Default config
+app.config.from_object('config.default')
+#Secret keys in config
+app.config.from_pyfile('config.py')
+#Enviroment variables. Either production or development.
+app.config.from_envvar('APP_CONFIG_FILE')
+
 app.config['SQLALCHEMY_DATABASE_URI']
 app.config['CSRF_ENABLED']
 app.config['SECRET_KEY']

@@ -24,7 +24,7 @@ class slack_user(db.Model):
 
 #channel table
 class message_channel(db.Model):
-    # Here we define columns for the table address.
+    # Columns are ID, channel_number, channel_name with indexing on channel_number
     ID = db.Column(db.Integer, db.Sequence('user_id_seq'), primary_key=True)
     channel_number = db.Column(db.String(50), index=True, unique=True)
     channel_name = db.Column(db.String(50))
@@ -38,12 +38,12 @@ class message_channel(db.Model):
 
 #Message table
 class message(db.Model):
+    #Columns are ID, date_time, msg, slack_number, channel_number
     ID = db.Column(db.Integer, db.Sequence('user_id_seq'), primary_key=True)
     date_time = db.Column(db.Integer)
     msg = db.Column(db.String(2000))
     slack_number = db.Column(db.String(50), index=True)
     channel_number = db.Column(db.String(50), index=True)
-    #__table_args__ = (db.UniqueConstraint('msg', 'date_time','slack_number', name='unique_message'),)
 
     def __init__(self, date_time, msg, slack_number, channel_number):
         self.date_time = date_time
@@ -54,6 +54,3 @@ class message(db.Model):
     def __repr__(self):
         return '<message %r>' % self.ID
 db.create_all()
-
-# notes for MAC OSX
-#TRUE was changed from NONE in /Users/<USER>/anaconda/lib/python3.5/site-packages/flask_sqlalchemy/__init__.py

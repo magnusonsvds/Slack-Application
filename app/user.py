@@ -12,8 +12,9 @@ class User(object):
         self.allUsers = []
         self.names ={}
 
-    #retrives all of the user information
+    #retrives user information through slack web-api call
     def getUserInformation(self):
+        #Api call for all of the users
         responseObject = slackconnect.users.list()
         responseMemberList = responseObject.body["members"]
         for member in responseMemberList:
@@ -39,7 +40,7 @@ class User(object):
             else:
                 db.session.merge(new_user)
 
-    #similar ot getUserInformation but returns in a different format
+    #Queries the database for all of the users
     def userList(self):
         query = self.table.query.all()
         for user in query:

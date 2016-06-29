@@ -14,8 +14,9 @@ class Channel(object):
        self.allChannels = {}
        self.reverseChannelLookup = {}
 
-    #Retrives all of the channel information
+    #Retrives channel information through Slack web-api call
     def getChannelInfo(self):
+        #Api call retrives all of the channels
         responseObject = slackconnect.channels.list()
         responseChannelList = responseObject.body["channels"]
         for channel in responseChannelList:
@@ -25,7 +26,7 @@ class Channel(object):
             self.channelInfo.append(chanInfo)
         return self.channelInfo
 
-    #Push all of the channels to the database
+    #Push all of the channels into the database
     def sendChannelsToDatabase(self, populate):
         for channel in self.channelInfo:
             channelNum = channel[0]
@@ -36,7 +37,8 @@ class Channel(object):
                 db.session.add(new_channel)
             else:
                 db.session.merge(new_channel)
-    #similar to getChannelInfo but returns in a different format
+
+    #Queries the database for all channel information
     def channelList(self):
         query = self.table.query.all()
         for channel in query:

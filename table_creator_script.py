@@ -9,15 +9,16 @@ from app.channel import Channel
 
 from app import db
 
+#####################################################################
+# Script generates message, message_channel, and slack_user tables. #
+# Message_channel and slack_user are then populated.                #
+#####################################################################
+
 def main():
 	ch = Channel()
 	usr = User()
 	channels = ch.getChannelInfo()
 	people = usr.getUserInformation()
-	#messagesForAllChannels = []
-	#for chan in channels:
-	#	mes =  getMessageinfo(chan)
-	#	messagesForAllChannels.append(mes)
 
 
 	insertData(people, channels)
