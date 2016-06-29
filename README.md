@@ -4,9 +4,9 @@
 
 ## Setup:
 
- -Config.py in instance directory takes a web-api Oauth2 token from slack.com.
- 	- Database and username "mysql://USERNAME:PASSWORD@HOST/DATABASE". One can use any database supported by sqlalchemy.
- 	- Think of a random SQLalchemy secret key
+ - Config.py in instance directory takes a web-api Oauth2 token from slack.com.
+ 	 - Database and username "mysql://USERNAME:PASSWORD@HOST/DATABASE". One can use any database supported by sqlalchemy.
+ 	 - Think of a random SQLalchemy secret key
  
  - Run the table_creator_script.py to generate and initialy populate the necesary  tables.
 
@@ -16,7 +16,7 @@
 
  - Run "bash start.sh" to start the program. Web app will run at 127.0.0.1:5000 on local machine.
 
- ## Setup (not required):
+ ### Setup (not required):
  	- Run the web app on ngrok --> Go to www.ngrok.com and follow directions.
 
 ## Notes:
