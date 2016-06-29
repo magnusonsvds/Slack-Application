@@ -1,2 +1,5 @@
 # Slack-Application
-Search through users and their messages in slack
+Search through messages on slack via users, dates and channels
+
+## Notes:
+- TRUE was changed from NONE in /Users/<USER>/anaconda/lib/python3.5/site-packages/flask_sqlalchemy/__init__.py
