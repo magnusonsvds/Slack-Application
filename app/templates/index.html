@@ -57,7 +57,7 @@
 						<td width ="22%">{{ messageInfo[key][3]}}</td>
 						<td width ="20%">{{ messageInfo[key][1]}}</td>
 						<td width ="13%">{{ messageInfo[key][2]}}</td>
-						<td width ="45%">{{ messageInfo[key][0]}}
+						<td width ="45%" data-toggle="modal" data-target="#myModal{{count|string}}">{{ messageInfo[key][0]}}
 						{% for i in range (4, messageInfo[key]|length) if user !='None' %}
 							</td> </tr> 
 							<tbody>
@@ -70,11 +70,6 @@
 							</tbody>
 						{%endfor%}
 							{% if messageInfo[key]|length > 4 and user == 'None'%}
-								
-									<!-- Trigger the modal with a button -->
-									<div align="left"><button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal{{count|string}}">Messages</button></div>
-							
-							
 								<div class="container">
 									<!-- Modal -->
 									<div class="modal fade" id="myModal{{count|string}}" role="dialog" data-backdrop ="false">
