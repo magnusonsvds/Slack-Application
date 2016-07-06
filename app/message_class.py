@@ -12,9 +12,8 @@ class Message_Class(object):
     	self.ListOfMessages = []
    
     #Gets messages from Slack from since last timestamp
-    def getMessageInfo(self, channel, date):
-        #Slack api call with the paramater of a channel and the date of the last message 
-        # entered into the database 
+    def getMessageInfo(self,channel, date):
+        
         responseObject = slackconnect.channels.history(channel, oldest = date)
         responseDict = responseObject.body["messages"]
 
@@ -40,7 +39,7 @@ class Message_Class(object):
             new_message = message(date, text, userNum, channelNum)
             db.session.merge(new_message)
 
-    #Queries the database for messages given the filters 
+    #Queries for messages given the filters 
     def queryMessages(self, startDate, channelID, slackID):
         eod = startDate + 23* 59 * 59
         if (channelID  == "None" and slackID == "None"):
@@ -53,7 +52,7 @@ class Message_Class(object):
             messageObjects = message.query.filter(startDate < message.date_time, message.date_time <eod, message.channel_number == channelID, message.slack_number == slackID).all()
         return messageObjects
 
-    #Organizes a list of all the messages into an Ordered dictionary of lists
+    #Organizes a list of all the messages into a list of lists
     def messageList(self, messageObjects, userObjects, channel, user, theDate, channelIDNumber):
         messageStack = collections.OrderedDict()
         messagedUsers = userObjects.copy()
