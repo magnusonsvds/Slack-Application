@@ -10,18 +10,12 @@ from app.channel import Channel
 from app import db
 from app.views import ch, usr
 
-#############################################################################################
-# Script should be run under a cron job of every 30 seconds.  Script populates the message, #
-# slack_user and message_channel tables with new information.                               #
-#############################################################################################
-
-class UpdateDatabase(object):
+class updateDatabase(object):
 	def __init__(self, channel, user):
 		self.channel = channel
 		self.user = user
 
-	#check if new information and update the tables
-	def run(self):
+	def before_Pageload(self):
 	    #Initilizing chanel, user and message object
 	    msg = Message_Class() 
 	    #Calling slack api for new information
@@ -43,7 +37,6 @@ class UpdateDatabase(object):
 	    
 	    #Querying the message table for the last date time a message was posted
 	    lastMessageTimestamp = message.query.order_by(desc(('date_time'))).first()
-	    #If there are no messages in the database (first time use case)
 	    if lastMessageTimestamp == None:
 	        #convert date to a timestamp
 	        dateTimeToday = date.today()
@@ -51,7 +44,6 @@ class UpdateDatabase(object):
 	        lastMessageTimestamp = int(lastMessageTimestamp)
 	    else:
 	        lastMessageTimestamp = lastMessageTimestamp.date_time
-	        
 	    #Get messageObjects from slack and send them to the database
 	    for channelIdNumber in channelQuery:
 	        slackMessages = msg.getMessageInfo(channelIdNumber.channel_number, lastMessageTimestamp)
@@ -64,5 +56,5 @@ class UpdateDatabase(object):
 
 
 if __name__ == '__main__':
-	update = UpdateDatabase(ch, usr)
-	update.run()
+	update = updateDatabase(ch, usr)
+	update.before_Pageload()
